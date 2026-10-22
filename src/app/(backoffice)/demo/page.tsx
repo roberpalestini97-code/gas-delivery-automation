@@ -185,7 +185,7 @@ export default function DemoPage() {
       <div>
         <h2
           className="text-2xl"
-          style={{ fontFamily: "var(--font-brand), serif" }}
+          style={{ fontFamily: "var(--font-brand), sans-serif" }}
         >
           Demo WhatsApp
         </h2>

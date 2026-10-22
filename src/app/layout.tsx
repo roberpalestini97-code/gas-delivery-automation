@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { DM_Sans, Fraunces } from "next/font/google";
+import { Barlow_Condensed, Outfit } from "next/font/google";
 import "./globals.css";
 
-const display = DM_Sans({
+const display = Outfit({
   subsets: ["latin"],
   variable: "--font-display",
 });
 
-const brand = Fraunces({
+const brand = Barlow_Condensed({
   subsets: ["latin"],
+  weight: ["600", "700", "800"],
   variable: "--font-brand",
 });
 

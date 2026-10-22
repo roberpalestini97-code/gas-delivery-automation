@@ -40,7 +40,17 @@ body {
     radial-gradient(1100px 480px at 8% -8%, var(--hero-glow), transparent 58%),
     radial-gradient(800px 360px at 95% 0%, rgba(225, 29, 46, 0.08), transparent 50%),
     linear-gradient(180deg, #f4f9fd 0%, var(--background) 42%, #e4eef7 100%);
-  font-family: var(--font-display), "Segoe UI", sans-serif;
+  font-family: var(--font-display), "Trebuchet MS", sans-serif;
+  font-feature-settings: "ss01" on;
+}
+
+h1,
+h2,
+h3,
+.font-brand {
+  font-family: var(--font-brand), "Arial Narrow", sans-serif;
+  letter-spacing: 0.01em;
+  font-weight: 700;
 }
 
 a {

@@ -41,7 +41,7 @@ export default function ConversacionDetailPage() {
         </Link>
         <h2
           className="text-3xl mt-1"
-          style={{ fontFamily: "var(--font-brand), serif" }}
+          style={{ fontFamily: "var(--font-brand), sans-serif" }}
         >
           Chat #{data.conversation.id}
         </h2>

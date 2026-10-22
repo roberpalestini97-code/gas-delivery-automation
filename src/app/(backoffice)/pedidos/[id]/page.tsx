@@ -69,7 +69,7 @@ export default function PedidoDetailPage() {
           </Link>
           <h2
             className="text-3xl mt-1"
-            style={{ fontFamily: "var(--font-brand), serif" }}
+            style={{ fontFamily: "var(--font-brand), sans-serif" }}
           >
             {orderCode(order.id)}
           </h2>

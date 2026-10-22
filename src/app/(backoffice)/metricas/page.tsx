@@ -87,7 +87,7 @@ export default function MetricasPage() {
         <div>
           <h2
             className="text-2xl"
-            style={{ fontFamily: "var(--font-brand), serif" }}
+            style={{ fontFamily: "var(--font-brand), sans-serif" }}
           >
             Métricas
           </h2>
@@ -108,7 +108,7 @@ export default function MetricasPage() {
             </p>
             <p
               className="text-3xl mt-1"
-              style={{ fontFamily: "var(--font-brand), serif" }}
+              style={{ fontFamily: "var(--font-brand), sans-serif" }}
             >
               {c.value}
             </p>

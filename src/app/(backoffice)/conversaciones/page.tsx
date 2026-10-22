@@ -29,7 +29,7 @@ export default function ConversacionesPage() {
       <div>
         <h2
           className="text-2xl"
-          style={{ fontFamily: "var(--font-brand), serif" }}
+          style={{ fontFamily: "var(--font-brand), sans-serif" }}
         >
           Conversaciones
         </h2>

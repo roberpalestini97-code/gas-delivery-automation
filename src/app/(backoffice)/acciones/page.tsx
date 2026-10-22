@@ -92,7 +92,7 @@ export default function AccionesPage() {
       <div>
         <h2
           className="text-2xl"
-          style={{ fontFamily: "var(--font-brand), serif" }}
+          style={{ fontFamily: "var(--font-brand), sans-serif" }}
         >
           Acciones del repartidor
         </h2>
