@@ -1,7 +1,7 @@
 export const config = {
   appName: "El Barba Gas",
   adminPassword: process.env.ADMIN_PASSWORD || "barbara-demo",
-  authSecret: process.env.AUTH_SECRET || "el-barbara-dev-secret-change-me",
+  authSecret: process.env.AUTH_SECRET || "el-barba-gas-dev-secret",
   demoMode: process.env.DEMO_MODE !== "false",
   whatsapp: {
     token: process.env.WHATSAPP_TOKEN || "",

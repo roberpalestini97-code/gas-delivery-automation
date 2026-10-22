@@ -184,18 +184,32 @@ export function seedIfEmpty(db: Db, _sqlite?: Database.Database) {
     ])
     .run();
 
+  // Phones are placeholders until real WhatsApp numbers are wired in Repartidores
   db.insert(schema.drivers)
     .values([
       {
-        name: "Carlos (Camión 1)",
+        name: "Camión 1 — Santa Clara / Centro",
         phone: "5491110000001",
-        zones: JSON.stringify(["norte", "centro"]),
+        zones: JSON.stringify([
+          "santa clara",
+          "centro",
+          "frente mar",
+          "santa elena",
+          "playa dorada",
+        ]),
         active: true,
       },
       {
-        name: "Luis (Camión 2)",
+        name: "Camión 2 — Norte / Sur costa",
         phone: "5491110000002",
-        zones: JSON.stringify(["sur", "oeste"]),
+        zones: JSON.stringify([
+          "camet norte",
+          "mar de cobo",
+          "la caleta",
+          "parque lago",
+          "mar chiquita",
+          "atlantida",
+        ]),
         active: true,
       },
     ])
@@ -206,8 +220,13 @@ export function seedIfEmpty(db: Db, _sqlite?: Database.Database) {
   db.insert(schema.auditEvents)
     .values({
       kind: "seed",
-      summary: "Base inicial cargada (productos, repartidores, acciones)",
-      payloadJson: "{}",
+      summary:
+        "Seed El Barba Gas: garrafas 10/15 + tubo 45, zonas Santa Clara del Mar",
+      payloadJson: JSON.stringify({
+        local: "Av. Automóvil Club Argentino 862, Santa Clara del Mar",
+        whatsappPublic: ["2235388647", "2234602686"],
+        instagram: "@elbarbagas",
+      }),
     })
     .run();
 }

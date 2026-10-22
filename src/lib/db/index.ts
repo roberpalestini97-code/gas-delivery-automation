@@ -11,6 +11,11 @@ const globalForDb = globalThis as unknown as {
 };
 
 function resolveDbPath() {
+  // Vercel serverless FS is read-only except /tmp (data resets on cold start —
+  // fine for UI demos; for production use Neon — see docs/deploy-vercel.md).
+  if (process.env.VERCEL || process.env.DATABASE_PATH === ":tmp:") {
+    return path.join("/tmp", "el-barba-gas.db");
+  }
   const configured = config.dbPath;
   if (path.isAbsolute(configured)) return configured;
   return path.join(process.cwd(), configured);

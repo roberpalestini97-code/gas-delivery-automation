@@ -172,11 +172,17 @@ function pickDriver(zone?: string | null) {
 }
 
 function guessZone(address: string) {
-  const lower = address.toLowerCase();
-  if (/(norte|belgrano|nuñez|nunez|saavedra)/.test(lower)) return "norte";
-  if (/(sur|avellaneda|lanus|lomas)/.test(lower)) return "sur";
-  if (/(oeste|moron|ramos|haedo)/.test(lower)) return "oeste";
-  return "centro";
+  const lower = address
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "");
+  if (/(camet|mar de cobo|caleta|parque lago)/.test(lower)) return "camet norte";
+  if (/(mar chiquita|atlantida)/.test(lower)) return "mar chiquita";
+  if (/(frente mar|santa elena|playa dorada)/.test(lower)) return "frente mar";
+  if (/(santa clara|aca |automovil club)/.test(lower)) return "santa clara";
+  if (/(norte)/.test(lower)) return "camet norte";
+  if (/(sur)/.test(lower)) return "mar chiquita";
+  return "santa clara";
 }
 
 async function dispatchOrder(orderId: number) {

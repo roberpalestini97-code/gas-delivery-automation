@@ -1,13 +1,36 @@
 # El Barba Gas — pedidos WhatsApp + back office
 
-Sistema para **El Barba Gas** ([@elbarbagas](https://www.instagram.com/elbarbagas/)) (gas envasado): el bot toma el pedido por WhatsApp, lo guarda en base de datos, espeja a Google Sheets y avisa al repartidor. El repartidor responde al mensaje del pedido («estoy llegando», «estoy afuera», «pagó efectivo», etc.) y el bot avisa al cliente correcto.
+Repo: [rober-palestini/gas-delivery-automation](https://cursor.com/codebase/rober-palestini/gas-delivery-automation) (Private)
+
+Sistema para **El Barba Gas** ([@elbarbagas](https://www.instagram.com/elbarbagas/)): el bot toma el pedido por WhatsApp, lo guarda en base, espeja a Google Sheets (opcional) y avisa al repartidor. El repartidor responde al mensaje del pedido («estoy llegando», «estoy afuera», «pagó efectivo», etc.) y el bot avisa al cliente.
+
+Local: Santa Clara del Mar y zonas aledañas · WhatsApp público del local: `223 538-8647` / `223 460-2686`.
 
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind
-- SQLite local con Drizzle (demo sin credenciales)
+- SQLite local (Drizzle); en Vercel usa `/tmp` hasta migrar a Neon
 - WhatsApp Cloud API de Meta (opcional; hay modo demo)
-- Deploy pensado para Vercel Hobby
+- Deploy: Vercel Hobby — [docs/deploy-vercel.md](docs/deploy-vercel.md)
+
+## Clonar (Windows → WSL)
+
+Origin CLI no corre en PowerShell. En WSL:
+
+```bash
+curl -fsSL https://downloads.cursor.com/origin/install.sh | sh
+origin auth login
+origin repo clone rober-palestini/gas-delivery-automation
+```
+
+Si `origin` no se encuentra:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Docs CLI: https://cursor.com/docs/origin/cli
 
 ## Arranque local
 
@@ -18,55 +41,37 @@ npm run dev
 ```
 
 Abrí [http://127.0.0.1:43123](http://127.0.0.1:43123)  
-Login: contraseña `barbara-demo` (o `ADMIN_PASSWORD`).
+Login: `barbara-demo` (o `ADMIN_PASSWORD`).
 
 ### Demo de venta (sin Meta)
 
-No hace falta token de WhatsApp para desarrollar ni para la reunión de venta.
+1. Footer → **Demo WA** → **Correr demo completa**
+2. Revisá **Pedidos** (ABM + timeline) y **Conversaciones**
+3. **Acciones**: agregá una frase nueva (adaptabilidad)
+4. Footer → **Conexión**: checklist hasta pegar el token
 
-1. Entrá al back office → **Demo WA**
-2. Tocá **Correr demo completa**
-3. Revisá **Pedidos** (timeline) y **Conversaciones**
-4. En **Acciones**, agregá una acción nueva (ej. «Dejo en portería») para mostrar adaptabilidad
-5. En **Conexión**, cargá pedidos de ejemplo y mirá el checklist hasta pegar el token
-
-Script detallado: [docs/demo-script.md](docs/demo-script.md)  
-Cuando tengas tu WhatsApp de prueba: [docs/meta-setup.md](docs/meta-setup.md)
+Más: [docs/demo-script.md](docs/demo-script.md) · Meta: [docs/meta-setup.md](docs/meta-setup.md)
 
 ## Flujo
 
-1. Cliente escribe al WhatsApp del local
-2. Bot pide dirección → producto → cantidad → pago → confirmación
-3. Se crea el pedido, se append-ea a Sheets (si hay credenciales) y se manda el bloque al repartidor
-4. El repartidor **responde a ese mensaje** (o usa `#G-12 estoy llegando`)
-5. El bot actualiza estados y avisa al cliente
+1. Cliente escribe al WhatsApp
+2. Bot: dirección → producto → cantidad → pago → confirmación
+3. Pedido en DB (+ Sheets si hay credenciales) y mensaje al repartidor
+4. Repartidor responde al mensaje o usa `#G-12 estoy llegando`
+5. Bot actualiza estados y avisa al cliente  
+   También: alta manual desde **Pedidos** (editar / finalizar / eliminar lógico)
 
-## Variables de entorno
+## Variables
 
-Ver `.env.example`.
+Ver `.env.example`. Mínimo: `ADMIN_PASSWORD`, `AUTH_SECRET`.  
+WhatsApp: `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_VERIFY_TOKEN`.
 
-| Variable | Uso |
-|---|---|
-| `ADMIN_PASSWORD` / `AUTH_SECRET` | Login back office |
-| `DATABASE_PATH` | Archivo SQLite |
-| `WHATSAPP_*` | Cloud API Meta |
-| `SHEET_ID` / `GOOGLE_SERVICE_ACCOUNT_JSON` | Espejo Sheets |
-
-### Webhook Meta
-
-`GET/POST https://tu-dominio/api/whatsapp/webhook`  
-Verify token: el de `WHATSAPP_VERIFY_TOKEN`.
-
-## Capa gratuita
-
-- Vercel Hobby + SQLite en demo local (en producción Vercel conviene Neon free y migrar el schema)
-- Meta: mensajes entrantes gratis; cupo mensual de service messages (ver pricing actual de Meta)
-- Sin BSP pagos ni LLM en el MVP
+Webhook: `https://tu-dominio/api/whatsapp/webhook`
 
 ## Scripts
 
 ```bash
-npm run dev      # http://127.0.0.1:43123
+npm run dev      # :43123
 npm run build
 npm run start
 npm run lint
