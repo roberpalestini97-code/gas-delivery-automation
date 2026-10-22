@@ -13,6 +13,7 @@ const NAV = [
   { href: "/repartidores", label: "Repartidores" },
   { href: "/productos", label: "Productos" },
   { href: "/demo", label: "Demo WA" },
+  { href: "/conexion", label: "Conexión" },
 ];
 
 export function Shell({ children }: { children: React.ReactNode }) {

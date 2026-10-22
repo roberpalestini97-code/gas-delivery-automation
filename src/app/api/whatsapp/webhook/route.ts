@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { config } from "@/lib/config";
 import { routeInbound } from "@/lib/agent/router";
+import { verifyMetaSignature } from "@/lib/whatsapp/signature";
 import {
   extractInboundMessages,
   verifyWebhookChallenge,
@@ -23,9 +24,15 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const rawBody = await request.text();
+  const signature = request.headers.get("x-hub-signature-256");
+  if (!verifyMetaSignature(rawBody, signature)) {
+    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+  }
+
   let payload: WhatsAppWebhookPayload;
   try {
-    payload = (await request.json()) as WhatsAppWebhookPayload;
+    payload = JSON.parse(rawBody) as WhatsAppWebhookPayload;
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }

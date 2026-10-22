@@ -47,4 +47,5 @@ Explicar: no hace falta reprogramar el bot para sumar frases del día a día.
 
 - Meta Cloud API directa (sin intermediario caro)
 - Arranque en capa gratuita / costo bajo
-- Cuando tengan el número verificado, el mismo flujo sale a producción
+- Mostrar **Conexión**: checklist + modo demo hasta pegar el token
+- Cuando tengan el número verificado (o tu WhatsApp de prueba), el mismo flujo sale a producción sin reescribir el bot

@@ -7,6 +7,7 @@ export const config = {
     token: process.env.WHATSAPP_TOKEN || "",
     phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || "",
     verifyToken: process.env.WHATSAPP_VERIFY_TOKEN || "el-barbara-verify",
+    appSecret: process.env.WHATSAPP_APP_SECRET || "",
     apiVersion: process.env.WHATSAPP_API_VERSION || "v21.0",
   },
   sheets: {

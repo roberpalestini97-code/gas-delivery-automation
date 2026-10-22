@@ -155,6 +155,38 @@ export async function applyDriverAction(params: {
     });
     const sent = await sendText(customer.phone, customerBody);
     customerMessageId = sent.messageId;
+
+    // Persist in the customer's conversation so the back office chat shows the aviso
+    let customerConversationId = order.conversationId;
+    if (!customerConversationId) {
+      const existing = db
+        .select()
+        .from(conversations)
+        .where(
+          and(
+            eq(conversations.phone, customer.phone),
+            eq(conversations.role, "customer"),
+          ),
+        )
+        .orderBy(desc(conversations.id))
+        .get();
+      customerConversationId = existing?.id ?? null;
+    }
+    if (customerConversationId) {
+      db.insert(messages)
+        .values({
+          conversationId: customerConversationId,
+          direction: "outbound",
+          waMessageId: customerMessageId || null,
+          body: customerBody,
+          rawJson: JSON.stringify({
+            kind: "driver_bridge",
+            action: action.code,
+            demo: !customerMessageId?.startsWith("wamid"),
+          }),
+        })
+        .run();
+    }
   }
 
   db.insert(orderEvents)

@@ -191,7 +191,8 @@ export default function DemoPage() {
         </h2>
         <p className="text-sm text-[var(--muted)]">
           Simula el webhook de Meta sin credenciales. Ideal para la reunión de
-          venta.
+          venta. Cuando tengas el token de tu WhatsApp de prueba, cargalo en
+          Conexión / <code>.env.local</code> — hasta entonces esto no te bloquea.
         </p>
       </div>
 

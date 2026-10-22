@@ -22,12 +22,16 @@ Login: contraseña `barbara-demo` (o `ADMIN_PASSWORD`).
 
 ### Demo de venta (sin Meta)
 
+No hace falta token de WhatsApp para desarrollar ni para la reunión de venta.
+
 1. Entrá al back office → **Demo WA**
 2. Tocá **Correr demo completa**
 3. Revisá **Pedidos** (timeline) y **Conversaciones**
 4. En **Acciones**, agregá una acción nueva (ej. «Dejo en portería») para mostrar adaptabilidad
+5. En **Conexión**, cargá pedidos de ejemplo y mirá el checklist hasta pegar el token
 
-Script detallado: [docs/demo-script.md](docs/demo-script.md)
+Script detallado: [docs/demo-script.md](docs/demo-script.md)  
+Cuando tengas tu WhatsApp de prueba: [docs/meta-setup.md](docs/meta-setup.md)
 
 ## Flujo
 
