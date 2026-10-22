@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3efe6;
-  --foreground: #1c1914;
-  --surface: #fffdf8;
-  --surface-2: #ebe4d6;
-  --border: #d7cdb8;
-  --muted: #7a7162;
-  --accent: #c45c26;
-  --accent-hover: #a74b1d;
-  --accent-soft: #f6e1d4;
-  --ink: #102a43;
-  --hero-glow: rgba(196, 92, 38, 0.18);
+  /* El Barba Gas — truck badge: blue field, white + red "Gas" */
+  --background: #eef5fb;
+  --foreground: #102536;
+  --surface: #ffffff;
+  --surface-2: #d9e8f5;
+  --border: #b7cfe3;
+  --muted: #5b7388;
+  --accent: #1e78b8;
+  --accent-hover: #155a8f;
+  --accent-soft: #d3e7f6;
+  --ink: #0f2a40;
+  --brand-red: #e11d2e;
+  --brand-red-soft: #fad7db;
+  --hero-glow: rgba(30, 120, 184, 0.22);
 }
 
 @theme inline {
@@ -34,9 +37,9 @@ body {
   margin: 0;
   color: var(--foreground);
   background:
-    radial-gradient(1200px 500px at 10% -10%, var(--hero-glow), transparent 60%),
-    radial-gradient(900px 400px at 90% 0%, rgba(16, 42, 67, 0.08), transparent 55%),
-    linear-gradient(180deg, #f7f2e8 0%, var(--background) 40%, #ece6da 100%);
+    radial-gradient(1100px 480px at 8% -8%, var(--hero-glow), transparent 58%),
+    radial-gradient(800px 360px at 95% 0%, rgba(225, 29, 46, 0.08), transparent 50%),
+    linear-gradient(180deg, #f4f9fd 0%, var(--background) 42%, #e4eef7 100%);
   font-family: var(--font-display), "Segoe UI", sans-serif;
 }
 
@@ -46,7 +49,7 @@ a {
 }
 
 .panel {
-  background: color-mix(in srgb, var(--surface) 92%, white);
+  background: color-mix(in srgb, var(--surface) 94%, white);
   border: 1px solid var(--border);
   border-radius: 12px;
 }
@@ -78,7 +81,7 @@ table.data th {
 }
 
 table.data tr:hover td {
-  background: color-mix(in srgb, var(--accent-soft) 35%, transparent);
+  background: color-mix(in srgb, var(--accent-soft) 45%, transparent);
 }
 
 .timeline {

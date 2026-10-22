@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
-
-const COOKIE = "elbarbara_session";
+import { SESSION_COOKIE, getAuthSecret } from "@/lib/auth-shared";
 
 const PUBLIC_PATHS = [
   "/login",
@@ -15,13 +14,13 @@ export async function middleware(request: NextRequest) {
   if (
     PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`)) ||
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/favicon")
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/brand")
   ) {
     return NextResponse.next();
   }
 
-  // Allow demo simulate only when authenticated — handled in route
-  const token = request.cookies.get(COOKIE)?.value;
+  const token = request.cookies.get(SESSION_COOKIE)?.value;
   if (!token) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -33,18 +32,22 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const secret = new TextEncoder().encode(
-      process.env.AUTH_SECRET || "el-barbara-dev-secret-change-me",
-    );
-    await jwtVerify(token, secret);
+    await jwtVerify(token, new TextEncoder().encode(getAuthSecret()));
     return NextResponse.next();
   } catch {
+    // Stale cookie (old secret / old cookie name) → clear and re-login
     if (pathname.startsWith("/api/")) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      const res = NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
+      res.cookies.set("elbarbara_session", "", { path: "/", maxAge: 0 });
+      return res;
     }
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    return NextResponse.redirect(url);
+    const res = NextResponse.redirect(url);
+    res.cookies.set(SESSION_COOKIE, "", { path: "/", maxAge: 0 });
+    res.cookies.set("elbarbara_session", "", { path: "/", maxAge: 0 });
+    return res;
   }
 }
 

@@ -1,6 +1,6 @@
-# El Bárbara — pedidos WhatsApp + back office
+# El Barba Gas — pedidos WhatsApp + back office
 
-Sistema para **El Bárbara** (gas envasado): el bot toma el pedido por WhatsApp, lo guarda en base de datos, espeja a Google Sheets y avisa al repartidor. El repartidor responde al mensaje del pedido («estoy llegando», «estoy afuera», «pagó efectivo», etc.) y el bot avisa al cliente correcto.
+Sistema para **El Barba Gas** ([@elbarbagas](https://www.instagram.com/elbarbagas/)) (gas envasado): el bot toma el pedido por WhatsApp, lo guarda en base de datos, espeja a Google Sheets y avisa al repartidor. El repartidor responde al mensaje del pedido («estoy llegando», «estoy afuera», «pagó efectivo», etc.) y el bot avisa al cliente correcto.
 
 ## Stack
 

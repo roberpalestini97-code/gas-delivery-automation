@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -18,29 +18,37 @@ const NAV = [
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
 
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
-    router.refresh();
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    window.location.assign("/login");
   }
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_88%,transparent)] backdrop-blur sticky top-0 z-20">
-        <div className="mx-auto max-w-7xl px-4 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--muted)]">
-              Operaciones
-            </p>
-            <h1
-              className="text-2xl md:text-3xl leading-none"
-              style={{ fontFamily: "var(--font-brand), serif" }}
-            >
-              El Bárbara
-            </h1>
-          </div>
+      <header className="border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_90%,transparent)] backdrop-blur sticky top-0 z-20">
+        <div className="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <Link href="/pedidos" className="flex items-center gap-3 min-w-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/logo.svg"
+              alt="El Barba Gas"
+              width={168}
+              height={52}
+              className="h-10 w-auto"
+            />
+            <div className="hidden sm:block min-w-0">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--muted)]">
+                Operaciones
+              </p>
+              <p className="text-sm font-semibold text-[var(--ink)] truncate">
+                Back office
+              </p>
+            </div>
+          </Link>
           <nav className="flex flex-wrap gap-1">
             {NAV.map((item) => {
               const active =

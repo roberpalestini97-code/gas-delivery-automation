@@ -1,38 +1,45 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { config } from "@/lib/config";
-
-const COOKIE = "elbarbara_session";
+import { NextResponse } from "next/server";
+import {
+  SESSION_COOKIE,
+  getAdminPassword,
+  getAuthSecret,
+} from "@/lib/auth-shared";
 
 function secretKey() {
-  return new TextEncoder().encode(config.authSecret);
+  return new TextEncoder().encode(getAuthSecret());
 }
 
-export async function createSession() {
-  const token = await new SignJWT({ role: "admin" })
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  path: "/",
+  // Never force Secure in local/demo; Cloud preview proxies vary.
+  secure: false,
+  maxAge: 60 * 60 * 24 * 7,
+};
+
+export async function createSessionToken() {
+  return new SignJWT({ role: "admin" })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
     .sign(secretKey());
-
-  const jar = await cookies();
-  jar.set(COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    path: "/",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24 * 7,
-  });
 }
 
-export async function destroySession() {
-  const jar = await cookies();
-  jar.delete(COOKIE);
+export async function attachSessionCookie(response: NextResponse) {
+  const token = await createSessionToken();
+  response.cookies.set(SESSION_COOKIE, token, cookieOptions);
+  return response;
 }
 
-export async function getSession() {
-  const jar = await cookies();
-  const token = jar.get(COOKIE)?.value;
+export async function clearSessionCookie(response: NextResponse) {
+  response.cookies.set(SESSION_COOKIE, "", { ...cookieOptions, maxAge: 0 });
+  return response;
+}
+
+export async function verifySessionToken(token: string | undefined | null) {
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, secretKey());
@@ -42,12 +49,16 @@ export async function getSession() {
   }
 }
 
-export async function requireSession() {
-  const session = await getSession();
-  if (!session) return null;
-  return session;
+export function verifyPassword(password: string) {
+  const expected = getAdminPassword();
+  return password.trim() === expected;
 }
 
-export function verifyPassword(password: string) {
-  return password === config.adminPassword;
+export async function getSession() {
+  const jar = await cookies();
+  return verifySessionToken(jar.get(SESSION_COOKIE)?.value);
+}
+
+export async function requireSession() {
+  return getSession();
 }

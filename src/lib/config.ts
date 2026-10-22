@@ -1,5 +1,5 @@
 export const config = {
-  appName: "El Bárbara",
+  appName: "El Barba Gas",
   adminPassword: process.env.ADMIN_PASSWORD || "barbara-demo",
   authSecret: process.env.AUTH_SECRET || "el-barbara-dev-secret-change-me",
   demoMode: process.env.DEMO_MODE !== "false",

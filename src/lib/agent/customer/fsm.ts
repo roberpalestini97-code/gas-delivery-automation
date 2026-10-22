@@ -453,7 +453,7 @@ export async function handleCustomerMessage(inbound: NormalizedInbound) {
       await reply(
         phone,
         conversation.id,
-        `¡Hola! Soy el asistente de El Bárbara 🔥\nGas envasado a domicilio.\n\n${
+        `¡Hola! Soy el asistente de El Barba Gas 🔥\nGas envasado a domicilio.\n\n${
           customer.lastAddress
             ? `La última dirección que tenemos es:\n📍 ${customer.lastAddress}\n\n¿Repetimos esa o es otra?`
             : "¿Cuál es la dirección de entrega?"
@@ -634,7 +634,7 @@ export async function handleCustomerMessage(inbound: NormalizedInbound) {
       await reply(
         phone,
         conversation.id,
-        "¡Hola! Soy el asistente de El Bárbara. ¿Cuál es la dirección de entrega?",
+        "¡Hola! Soy el asistente de El Barba Gas. ¿Cuál es la dirección de entrega?",
       );
     }
   }

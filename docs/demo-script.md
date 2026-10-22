@@ -1,4 +1,4 @@
-# Script de demo comercial — El Bárbara
+# Script de demo comercial — El Barba Gas
 
 Duración sugerida: 8–10 minutos.
 

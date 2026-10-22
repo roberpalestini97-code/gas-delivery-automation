@@ -1,12 +1,11 @@
 "use client";
 
 import { FormEvent, Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 function LoginForm() {
-  const router = useRouter();
   const params = useSearchParams();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,18 +15,26 @@ function LoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-    setLoading(false);
-    if (!res.ok) {
-      setError("Contraseña incorrecta");
-      return;
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ password: password.trim() }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error || "Contraseña incorrecta");
+        setLoading(false);
+        return;
+      }
+      const next = params.get("next") || "/pedidos";
+      // Full navigation so the session cookie is always picked up by middleware
+      window.location.assign(next);
+    } catch {
+      setError("No se pudo iniciar sesión. Probá de nuevo.");
+      setLoading(false);
     }
-    router.push(params.get("next") || "/pedidos");
-    router.refresh();
   }
 
   return (
@@ -36,16 +43,20 @@ function LoginForm() {
       className="panel w-full max-w-md p-8 shadow-sm"
       style={{ animation: "fadeUp 0.5s ease" }}
     >
-      <p className="text-sm uppercase tracking-[0.2em] text-[var(--muted)] mb-2">
+      <div className="flex justify-center mb-5">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/brand/logo.svg"
+          alt="El Barba Gas"
+          width={280}
+          height={86}
+          className="h-[86px] w-auto"
+        />
+      </div>
+      <p className="text-sm uppercase tracking-[0.2em] text-[var(--muted)] mb-2 text-center">
         Back office
       </p>
-      <h1
-        className="text-4xl mb-2"
-        style={{ fontFamily: "var(--font-brand), serif" }}
-      >
-        El Bárbara
-      </h1>
-      <p className="text-[var(--muted)] mb-6">
+      <p className="text-[var(--muted)] mb-6 text-center text-sm">
         Pedidos de gas envasado, conversaciones y despacho.
       </p>
       <label className="block text-sm mb-2">Contraseña</label>
@@ -55,6 +66,7 @@ function LoginForm() {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="barbara-demo"
         autoFocus
+        autoComplete="current-password"
       />
       {error ? (
         <p className="text-sm text-red-700 mt-2">{error}</p>
@@ -84,10 +96,22 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center p-6">
-      <Suspense fallback={<div className="panel p-8">Cargando…</div>}>
-        <LoginForm />
-      </Suspense>
+    <main className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-25"
+        style={{
+          backgroundImage: "url(/brand/el-barba-gas-source.jpg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "saturate(1.05)",
+        }}
+      />
+      <div className="relative z-10 w-full flex justify-center">
+        <Suspense fallback={<div className="panel p-8">Cargando…</div>}>
+          <LoginForm />
+        </Suspense>
+      </div>
     </main>
   );
 }

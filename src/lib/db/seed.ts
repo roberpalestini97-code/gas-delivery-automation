@@ -18,7 +18,7 @@ const DEFAULT_ACTIONS = [
     ]),
     notifyCustomer: true,
     customerTemplate:
-      "🚚 El camión de El Bárbara está llegando a tu dirección. ¡Salí cuando puedas!",
+      "🚚 El camión de El Barba Gas está llegando a tu dirección. ¡Salí cuando puedas!",
     deliveryStatus: "arriving",
     paymentStatus: null as string | null,
     needsExtra: null as string | null,
@@ -37,7 +37,7 @@ const DEFAULT_ACTIONS = [
     ]),
     notifyCustomer: true,
     customerTemplate:
-      "⏱ El repartidor de El Bárbara llega en aproximadamente {{minutes}} minutos.",
+      "⏱ El repartidor de El Barba Gas llega en aproximadamente {{minutes}} minutos.",
     deliveryStatus: "en_route",
     paymentStatus: null,
     needsExtra: "minutes",
@@ -90,7 +90,7 @@ const DEFAULT_ACTIONS = [
     aliasesJson: JSON.stringify(["entregado", "entregue", "listo entregado"]),
     notifyCustomer: true,
     customerTemplate:
-      "✅ Pedido entregado. ¡Gracias por elegir El Bárbara!",
+      "✅ Pedido entregado. ¡Gracias por elegir El Barba Gas!",
     deliveryStatus: "delivered",
     paymentStatus: null,
     needsExtra: null,

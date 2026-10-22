@@ -13,8 +13,8 @@ const brand = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "El Bárbara — Back office",
-  description: "Pedidos de gas envasado, WhatsApp y despacho",
+  title: "El Barba Gas — Back office",
+  description: "Pedidos de gas envasado, WhatsApp y despacho · @elbarbagas",
 };
 
 export default function RootLayout({
