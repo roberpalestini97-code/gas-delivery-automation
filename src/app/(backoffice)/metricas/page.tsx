@@ -22,7 +22,7 @@ type Metrics = {
     orders: number;
     delivered: number;
   }>;
-  paymentBreakdown: Record<string, number>;
+  paymentBreakdown: Array<{ key: string; label: string; count: number }>;
 };
 
 export default function MetricasPage() {
@@ -148,10 +148,10 @@ export default function MetricasPage() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(data.paymentBreakdown).map(([k, v]) => (
-                <tr key={k}>
-                  <td>{k}</td>
-                  <td>{v}</td>
+              {data.paymentBreakdown.map((row) => (
+                <tr key={row.key}>
+                  <td>{row.label}</td>
+                  <td>{row.count}</td>
                 </tr>
               ))}
             </tbody>

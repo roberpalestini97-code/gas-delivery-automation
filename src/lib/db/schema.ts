@@ -79,6 +79,7 @@ export const orders = sqliteTable("orders", {
   deliveryStatus: text("delivery_status").notNull().default("draft"),
   notes: text("notes"),
   sheetRow: integer("sheet_row"),
+  deletedAt: text("deleted_at"),
   createdAt: text("created_at")
     .notNull()
     .default(sql`(datetime('now'))`),

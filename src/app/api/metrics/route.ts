@@ -9,6 +9,7 @@ import {
   products,
 } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { labelPayment } from "@/lib/labels";
 
 export async function GET() {
   const session = await requireSession();
@@ -17,7 +18,11 @@ export async function GET() {
   }
 
   const db = getDb();
-  const allOrders = db.select().from(orders).all();
+  const allOrders = db
+    .select()
+    .from(orders)
+    .all()
+    .filter((o) => !o.deletedAt);
   const allProducts = db.select().from(products).all();
   const allDrivers = db.select().from(drivers).all();
   const allConversations = db.select().from(conversations).all();
@@ -56,15 +61,20 @@ export async function GET() {
     ).length,
   }));
 
-  const paymentBreakdown = {
-    pending: allOrders.filter((o) => o.paymentStatus === "pending").length,
-    paid_cash: allOrders.filter((o) => o.paymentStatus === "paid_cash").length,
-    paid_transfer: allOrders.filter((o) => o.paymentStatus === "paid_transfer")
-      .length,
-    paid_prepaid: allOrders.filter((o) => o.paymentStatus === "paid_prepaid")
-      .length,
-    unpaid: allOrders.filter((o) => o.paymentStatus === "unpaid").length,
-  };
+  const paymentKeys = [
+    "pending",
+    "paid_cash",
+    "paid_transfer",
+    "paid_prepaid",
+    "unpaid",
+    "failed",
+  ] as const;
+
+  const paymentBreakdown = paymentKeys.map((key) => ({
+    key,
+    label: labelPayment(key),
+    count: allOrders.filter((o) => o.paymentStatus === key).length,
+  }));
 
   return NextResponse.json({
     totals: {

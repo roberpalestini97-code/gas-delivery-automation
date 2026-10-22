@@ -83,6 +83,7 @@ function createDb() {
       delivery_status TEXT NOT NULL DEFAULT 'draft',
       notes TEXT,
       sheet_row INTEGER,
+      deleted_at TEXT,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
@@ -125,6 +126,13 @@ function createDb() {
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
   `);
+
+  // Soft-delete column for DBs created before ABM
+  try {
+    sqlite.exec(`ALTER TABLE orders ADD COLUMN deleted_at TEXT`);
+  } catch {
+    // column already exists
+  }
 
   const db = drizzle(sqlite, { schema });
   seedIfEmpty(db, sqlite);
