@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 type Metrics = {
   totals: {
@@ -26,15 +27,47 @@ type Metrics = {
 
 export default function MetricasPage() {
   const [data, setData] = useState<Metrics | null>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  async function load() {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("/api/metrics");
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || `Error ${res.status}`);
+      }
+      if (!json.totals) {
+        throw new Error("Respuesta de métricas incompleta");
+      }
+      setData(json as Metrics);
+    } catch (e) {
+      setData(null);
+      setError(e instanceof Error ? e.message : "No se pudieron cargar las métricas");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    fetch("/api/metrics")
-      .then((r) => r.json())
-      .then(setData);
+    load();
   }, []);
 
-  if (!data) {
+  if (loading) {
     return <p className="text-[var(--muted)]">Cargando métricas…</p>;
+  }
+
+  if (error || !data) {
+    return (
+      <div className="panel p-6 space-y-3">
+        <p className="text-red-700">{error || "Sin datos"}</p>
+        <Button size="sm" variant="secondary" onClick={load}>
+          Reintentar
+        </Button>
+      </div>
+    );
   }
 
   const cards = [
@@ -50,16 +83,21 @@ export default function MetricasPage() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h2
-          className="text-2xl"
-          style={{ fontFamily: "var(--font-brand), serif" }}
-        >
-          Métricas
-        </h2>
-        <p className="text-sm text-[var(--muted)]">
-          Consultas sobre la base: ventas, camiones, pagos y fallidos.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2
+            className="text-2xl"
+            style={{ fontFamily: "var(--font-brand), serif" }}
+          >
+            Métricas
+          </h2>
+          <p className="text-sm text-[var(--muted)]">
+            Consultas sobre la base: ventas, camiones, pagos y fallidos.
+          </p>
+        </div>
+        <Button size="sm" variant="outline" onClick={load}>
+          Actualizar
+        </Button>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
